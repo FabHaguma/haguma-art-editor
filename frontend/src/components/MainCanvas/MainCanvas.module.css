@@ -1,0 +1,21 @@
+/* MainCanvas.module.css - Main canvas area */
+.mainCanvas {
+  grid-area: canvas;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-canvas);
+  overflow: auto;
+  padding: 2rem 1rem;
+  position: relative;
+}
+
+.canvasWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}

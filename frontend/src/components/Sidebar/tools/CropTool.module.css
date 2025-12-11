@@ -1,0 +1,85 @@
+.cropToolContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 50;
+  pointer-events: all;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.cropCanvas {
+  display: block;
+  max-width: 100%;
+  max-height: calc(100vh - 200px);
+  cursor: crosshair;
+  pointer-events: all;
+}
+
+.cropControls {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg-panel);
+  padding: 16px 24px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border-color);
+  pointer-events: all;
+  z-index: 100;
+}
+
+.cropInfo {
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.cropButtons {
+  display: flex;
+  gap: 12px;
+}
+
+.cancelButton,
+.confirmButton {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cancelButton {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.cancelButton:hover {
+  background: var(--bg-hover);
+}
+
+.confirmButton {
+  background: var(--primary-color);
+  color: white;
+}
+
+.confirmButton:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* Prevent text selection during drag */
+.cropToolContainer * {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+}

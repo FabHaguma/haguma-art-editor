@@ -1,0 +1,142 @@
+.topbarContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  padding: 0 var(--spacing-md);
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  gap: var(--spacing-md);
+}
+
+.leftSection,
+.rightSection {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.centerSection {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+}
+
+.logo {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  white-space: nowrap;
+}
+
+.filename {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 300px;
+}
+
+.zoomLevel {
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  font-weight: 600;
+  padding: 4px 8px;
+  background: var(--bg-hover);
+  border-radius: 4px;
+  min-width: 50px;
+  text-align: center;
+}
+
+.panelToggle,
+.themeToggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.panelToggle:hover,
+.themeToggle:hover {
+  background: var(--bg-hover);
+  border-color: var(--primary-color);
+}
+
+.panelToggle {
+  display: none;
+}
+
+.zoomControls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.zoomButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 8px;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1rem;
+}
+
+.zoomButton:hover {
+  background: var(--bg-hover);
+  border-color: var(--primary-color);
+}
+
+/* Show panel toggles on mobile */
+@media (max-width: 1024px) {
+  .panelToggle {
+    display: flex;
+  }
+  
+  .logo {
+    font-size: 1rem;
+  }
+  
+  .filename {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .topbar {
+    padding: 0 var(--spacing-sm);
+    gap: var(--spacing-sm);
+  }
+  
+  .leftSection,
+  .rightSection {
+    gap: var(--spacing-sm);
+  }
+  
+  .logo {
+    font-size: 0.875rem;
+  }
+}

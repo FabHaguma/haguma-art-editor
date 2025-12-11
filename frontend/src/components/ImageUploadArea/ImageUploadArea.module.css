@@ -1,0 +1,17 @@
+/* ImageUploadArea.module.css - Upload area styling */
+.uploadArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  padding: 2rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.uploadArea:hover {
+  border-color: var(--accent-color);
+}

@@ -1,0 +1,70 @@
+/* Sidebar.module.css - Sidebar layout and colors */
+.sidebar {
+  width: 320px;
+  min-width: 240px;
+  max-width: 400px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1rem;
+  gap: 2rem;
+  box-sizing: border-box;
+  height: 100%; /* Ensure it takes full height if parent allows */
+}
+
+.logoArea {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.logoText {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.closeImageButton {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.closeImageButton:hover {
+  background-color: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.sidebarContent {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.sidebarFooter {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.comingSoon {
+    font-style: italic;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    text-align: center;
+    margin: 0.5rem 0;
+}

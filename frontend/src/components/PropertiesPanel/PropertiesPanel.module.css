@@ -1,0 +1,99 @@
+.propertiesPanel {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  min-width: 300px;
+  max-width: 300px;
+  flex-shrink: 0;
+  background: var(--bg-panel);
+  border-left: 2px solid var(--border-color);
+  overflow-y: auto;
+  transition: transform 0.3s ease;
+  color: #f9fafb;
+}
+
+.propertiesPanel.hidden {
+  transform: translateX(100%);
+  width: 0;
+  border: none;
+}
+
+.metadataSection {
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.controlsSection {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.toolGroup {
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.toolLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.emptyState,
+.noToolSelected {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl);
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  min-height: 200px;
+}
+
+/* Scrollbar styling */
+.propertiesPanel::-webkit-scrollbar,
+.controlsSection::-webkit-scrollbar {
+  width: 8px;
+}
+
+.propertiesPanel::-webkit-scrollbar-track,
+.controlsSection::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+.propertiesPanel::-webkit-scrollbar-thumb,
+.controlsSection::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+.propertiesPanel::-webkit-scrollbar-thumb:hover,
+.controlsSection::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* Mobile adjustments */
+@media (max-width: 1024px) {
+  .propertiesPanel {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    z-index: 100;
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .propertiesPanel.hidden {
+    transform: translateX(100%);
+  }
+}
+
+@media (max-width: 768px) {
+  .propertiesPanel {
+    width: 280px;
+  }
+}

@@ -1,0 +1,23 @@
+.container {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.button {
+    flex: 1;
+    padding: 0.5rem;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button:hover {
+    background-color: var(--bg-hover);
+    border-color: var(--accent-color);
+}

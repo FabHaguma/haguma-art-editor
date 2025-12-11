@@ -1,0 +1,23 @@
+.rotateControls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.rotateButton {
+  flex: 1;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rotateButton:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-color);
+}

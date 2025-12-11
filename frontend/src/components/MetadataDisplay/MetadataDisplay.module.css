@@ -1,0 +1,23 @@
+/* MetadataDisplay.module.css - Metadata info styling */
+.metadataDisplay {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.98em;
+  word-break: break-word;
+}
+.metadataRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+.metadataLabel {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.metadataValue {
+  color: var(--text-secondary);
+}

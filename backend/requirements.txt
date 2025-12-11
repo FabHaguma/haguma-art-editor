@@ -1,0 +1,5 @@
+Flask
+Pillow
+python-dotenv  # For managing environment variables
+APScheduler    # For background cleanup task
+Flask-CORS     # To handle Cross-Origin Resource Sharing
