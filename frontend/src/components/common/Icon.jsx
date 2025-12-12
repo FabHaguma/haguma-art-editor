@@ -5,17 +5,25 @@ const ICON_MAP = {
     emoji: '🔄',
     svg: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M21 3v5h-5M3 21v-5h5M21 8a9 9 0 1 1-3.4-7M3 16a9 9 0 0 1 3.4 7" />
+        <rect x="6" y="6" width="12" height="12" />
+        <circle cx="6" cy="6" r="1.5" fill="currentColor" />
+        <circle cx="18" cy="6" r="1.5" fill="currentColor" />
+        <circle cx="6" cy="18" r="1.5" fill="currentColor" />
+        <circle cx="18" cy="18" r="1.5" fill="currentColor" />
       </svg>
     ),
   },
   crop: {
     emoji: '✂️',
     svg: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M6 6l12 12M18 6l-12 12M6 2v4M2 6h4M18 20v4M22 18h-4" />
-      </svg>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M3 7h4M7 3v4M17 21h4M21 17v4" />
+          <path d="M7 7h10a4 4 0 0 1 4 4v6" />
+          <path d="M7 7v10a4 4 0 0 0 4 4h6" />
+          <path d="M12 8v8M8 12h8" />
+        </svg>
     ),
+    
   },
   adjust: {
     emoji: '🎚️',

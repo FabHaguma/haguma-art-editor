@@ -17,18 +17,9 @@ function MetadataDisplay({ metadata }) {
         <div className={styles.metadataDisplay}>
             <h4 className={styles.title}>Image Info</h4>
             <ul className={styles.list}>
-                <li>
-                    <strong>Filename:</strong> <span>{metadata.filename}</span>
-                </li>
-                <li>
-                    <strong>W x H:</strong> <span>{metadata.dimensions?.width} × {metadata.dimensions?.height} px</span>
-                </li>
-                <li>
-                    <strong>Format:</strong> <span>{metadata.format}</span>
-                </li>
-                <li>
-                    <strong>Size:</strong> <span>{formatBytes(metadata.size_bytes)}</span>
-                </li>
+                <li><strong>W × H:</strong> {metadata.dimensions?.width} × {metadata.dimensions?.height} px</li>
+                <li><strong>Format:</strong> {metadata.format}</li>
+                <li><strong>Size:</strong> {formatBytes(metadata.size_bytes)}</li>
             </ul>
         </div>
     );
