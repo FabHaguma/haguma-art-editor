@@ -13,18 +13,26 @@
 .inputGroup {
     display: flex;
     align-items: center;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
+    background: var(--bg-tertiary);
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
     padding: 0 0.5rem;
     flex: 1;
+    transition: all var(--transition-fast);
+}
+
+.inputGroup:focus-within {
+    background: var(--bg-secondary);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.2);
 }
 
 .label {
     font-size: 0.75rem;
     color: var(--text-secondary);
     margin-right: 0.25rem;
-    font-weight: bold;
+    font-weight: 600;
+    letter-spacing: var(--font-tracking-tight);
 }
 
 .input {
@@ -45,36 +53,42 @@
 }
 
 .aspectButton {
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
+    background: var(--bg-tertiary);
+    border: 1px solid transparent;
     color: var(--text-secondary);
-    border-radius: 4px;
+    border-radius: var(--radius-md);
     width: 36px;
     height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all var(--transition-fast);
+}
+
+.aspectButton:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
 }
 
 .aspectButton.active {
-    background: var(--accent-color-dim);
-    color: var(--accent-color);
-    border-color: var(--accent-color);
+    background: var(--bg-secondary);
+    color: var(--primary-color);
+    border-color: var(--primary-color);
 }
 
 .applyButton {
-  background: var(--accent-color);
+  background: var(--primary-color);
   color: #fff;
   border: none;
-  border-radius: 4px;
-  padding: 0.4rem;
+  border-radius: var(--radius-md);
+  padding: 0.5rem;
   font-size: 0.9rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: background 0.2s;
-  margin-top: 0.25rem;
+  transition: background var(--transition-fast);
+  margin-top: 0.5rem;
 }
 .applyButton:hover {
-  background: var(--accent-color-hover);
+  background: var(--primary-hover);
 }

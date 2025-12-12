@@ -14,7 +14,7 @@ const CropPresetControls = ({ onActivateWithPreset }) => {
     return (
         <div className={styles.container}>
             <button 
-                className={styles.button}
+                className={`${styles.button} ${styles.mainButton}`}
                 onClick={() => onActivateWithPreset?.(null)}
                 title="Free Crop"
             >

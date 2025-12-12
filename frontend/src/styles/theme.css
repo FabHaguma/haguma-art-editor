@@ -1,17 +1,18 @@
 :root {
-  /* Colors */
-  --primary-color: #3b82f6;
-  --primary-hover: #2563eb;
-  --bg-primary: #ffffff;
-  --bg-secondary: #f3f4f6;
-  --bg-hover: #e5e7eb;
-  --bg-panel: #1a1a1a;
-  --bg-canvas: #ffeb3b;
-  --text-primary: #111827;
-  --text-secondary: #6b7280;
-  --border-color: #ff0000;
-  --error-color: #ef4444;
-  
+  /* Typography */
+  --font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-tracking-tight: -0.02em;
+  --font-tracking-normal: 0;
+  --line-height-relaxed: 1.5;
+  --line-height-tight: 1.2;
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
   /* Spacing */
   --spacing-xs: 0.25rem;
   --spacing-sm: 0.5rem;
@@ -19,19 +20,73 @@
   --spacing-lg: 1.5rem;
   --spacing-xl: 2rem;
 
-  /* Typography */
-  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  /* Animation */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+
+  /* Light Mode Defaults */
+  --primary-color: #007AFF; /* Apple Blue */
+  --primary-hover: #0062CC;
+  
+  --bg-primary: #F5F5F7; /* Light gray background common in macOS apps */
+  --bg-canvas: #FFFFFF;
+  
+  /* Glassmorphism Variables */
+  --bg-glass: rgba(255, 255, 255, 0.7);
+  --bg-glass-hover: rgba(255, 255, 255, 0.85);
+  --bg-glass-active: rgba(255, 255, 255, 0.95);
+  --backdrop-blur: blur(20px) saturate(180%);
+  
+  --bg-panel: rgba(255, 255, 255, 0.7); /* For solid fallback or glass base */
+  --bg-secondary: rgba(245, 245, 247, 0.5);
+  --bg-tertiary: rgba(0, 0, 0, 0.05);
+  --bg-hover: rgba(0, 0, 0, 0.05);
+  
+  --text-primary: #1D1D1F; /* Slate 900-ish */
+  --text-secondary: #86868B;
+  --text-tertiary: #BFBFBF;
+  
+  --border-subtle: rgba(0, 0, 0, 0.1);
+  --border-focus: #007AFF;
+  --border-color: rgba(0, 0, 0, 0.1); /* Backwards compatibility */
+  
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 10px 30px -10px rgba(0, 0, 0, 0.15);
+  --shadow-glass: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+  
+  --error-color: #FF3B30;
+  --success-color: #34C759;
+  --warning-color: #FF9500;
 }
 
 [data-theme='dark'] {
-  --primary-color: #60a5fa;
-  --primary-hover: #3b82f6;
-  --bg-primary: #1f2937;
-  --bg-secondary: #111827;
-  --bg-hover: #374151;
-  --bg-panel: #0a0a0a;
-  --bg-canvas: #ffd700;
-  --text-primary: #f9fafb;
-  --text-secondary: #9ca3af;
-  --border-color: #00ff00;
+  --primary-color: #0A84FF; /* Apple Blue Dark Mode */
+  --primary-hover: #409CFF;
+  
+  --bg-primary: #000000;
+  --bg-canvas: #1C1C1E;
+  
+  /* Glassmorphism Variables */
+  --bg-glass: rgba(30, 30, 30, 0.7);
+  --bg-glass-hover: rgba(45, 45, 45, 0.85);
+  --bg-glass-active: rgba(60, 60, 60, 0.95);
+  
+  --bg-panel: rgba(30, 30, 30, 0.7);
+  --bg-secondary: rgba(44, 44, 46, 0.5);
+  --bg-tertiary: rgba(255, 255, 255, 0.1);
+  --bg-hover: rgba(255, 255, 255, 0.1);
+  
+  --text-primary: #F5F5F7;
+  --text-secondary: #86868B;
+  --text-tertiary: #56565C;
+  
+  --border-subtle: rgba(255, 255, 255, 0.1);
+  --border-focus: #0A84FF;
+  --border-color: rgba(255, 255, 255, 0.1);
+  
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
 }

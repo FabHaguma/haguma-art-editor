@@ -5,11 +5,12 @@
   min-width: 300px;
   max-width: 300px;
   flex-shrink: 0;
-  background: var(--bg-panel);
-  border-left: 2px solid var(--border-color);
+  background: var(--bg-glass);
+  backdrop-filter: var(--backdrop-blur);
+  border-left: 1px solid var(--border-subtle);
   overflow-y: auto;
-  transition: transform 0.3s ease;
-  color: #f9fafb;
+  transition: transform var(--transition-normal);
+  color: var(--text-primary);
 }
 
 .propertiesPanel.hidden {
@@ -20,7 +21,7 @@
 
 .metadataSection {
   padding: var(--spacing-md);
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .controlsSection {
@@ -30,7 +31,7 @@
 
 .toolGroup {
   padding: var(--spacing-md);
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .toolLabel {
@@ -39,7 +40,7 @@
   color: var(--text-secondary);
   margin-bottom: var(--spacing-sm);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: var(--font-tracking-tight);
 }
 
 .emptyState,

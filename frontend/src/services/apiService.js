@@ -132,6 +132,28 @@ export const applyFilter = async (sessionId, originalExtension, type, intensity 
     return response.json();
 };
 
+export const undoImage = async (sessionId, originalExtension) => {
+    const response = await fetch(`${API_BASE_URL}/process/${sessionId}/${originalExtension}/undo`, {
+        method: 'POST',
+    });
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: "Network error" }));
+        throw new Error(errorData.error || `Undo failed with status: ${response.status}`);
+    }
+    return response.json();
+};
+
+export const redoImage = async (sessionId, originalExtension) => {
+    const response = await fetch(`${API_BASE_URL}/process/${sessionId}/${originalExtension}/redo`, {
+        method: 'POST',
+    });
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: "Network error" }));
+        throw new Error(errorData.error || `Redo failed with status: ${response.status}`);
+    }
+    return response.json();
+};
+
 export const getDownloadUrl = (sessionId, originalExtension, format = null) => {
     let url = `${API_BASE_URL}/download/${sessionId}/${originalExtension}`;
     if (format) {

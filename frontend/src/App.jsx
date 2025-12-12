@@ -4,7 +4,7 @@ import ToolPalette from './components/ToolPalette/ToolPalette';
 import PropertiesPanel from './components/PropertiesPanel/PropertiesPanel';
 import MainCanvas from './components/MainCanvas/MainCanvas';
 import SaveAsModal from './components/SaveAsModal/SaveAsModal';
-import { getDownloadUrl } from './services/apiService';
+import { getDownloadUrl, undoImage, redoImage } from './services/apiService';
 import styles from './App.module.css';
 
 function App() {
@@ -19,6 +19,8 @@ function App() {
     const [cropMode, setCropMode] = useState(false); // Interactive crop mode
     const [cropAspectRatio, setCropAspectRatio] = useState(null); // Aspect ratio for crop
     const [isSaveAsModalOpen, setIsSaveAsModalOpen] = useState(false);
+    const [canUndo, setCanUndo] = useState(false);
+    const [canRedo, setCanRedo] = useState(false);
 
     const toggleTheme = () => {
         setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
@@ -108,6 +110,8 @@ function App() {
             previewUrl: previewUrl,
             rawFile: rawFile,
         });
+        setCanUndo(!!sessionData.can_undo);
+        setCanRedo(!!sessionData.can_redo);
         setError('');
         setIsLoading(false); // Ensure loading is false after successful upload
     }, []);
@@ -133,6 +137,10 @@ function App() {
                 previewUrl: newPreviewUrl,
             };
         });
+        
+        if (newMetadata.can_undo !== undefined) setCanUndo(newMetadata.can_undo);
+        if (newMetadata.can_redo !== undefined) setCanRedo(newMetadata.can_redo);
+        
         setIsLoading(false);
     }, []);
 
@@ -142,6 +150,8 @@ function App() {
             URL.revokeObjectURL(imageSession.previewUrl);
         }
         setImageSession(null);
+        setCanUndo(false);
+        setCanRedo(false);
         setError('');
         setIsLoading(false);
     }, [imageSession]);
@@ -152,6 +162,30 @@ function App() {
 
     const handleSaveAsClose = () => {
         setIsSaveAsModalOpen(false);
+    };
+
+    const handleUndo = async () => {
+        if (!imageSession || !canUndo) return;
+        setIsLoading(true);
+        try {
+            const result = await undoImage(imageSession.id, imageSession.originalExtension);
+            updatePreviewAndMetadata(result, imageSession.id, imageSession.originalExtension);
+        } catch (err) {
+            setError(err.message);
+            setIsLoading(false);
+        }
+    };
+
+    const handleRedo = async () => {
+        if (!imageSession || !canRedo) return;
+        setIsLoading(true);
+        try {
+            const result = await redoImage(imageSession.id, imageSession.originalExtension);
+            updatePreviewAndMetadata(result, imageSession.id, imageSession.originalExtension);
+        } catch (err) {
+            setError(err.message);
+            setIsLoading(false);
+        }
     };
 
     const handleDownload = (filename, format) => {
@@ -184,6 +218,11 @@ function App() {
                 onZoomOut={handleZoomOut}
                 onFitScreen={handleFitScreen}
                 zoom={zoom}
+                canUndo={canUndo}
+                canRedo={canRedo}
+                onUndo={handleUndo}
+                onRedo={handleRedo}
+                onToolSelect={handleToolSelect}
             />
 
             <div className={styles.mainLayout}>

@@ -17,14 +17,19 @@ def upload_image_route():
         upload_data = image_service.save_uploaded_file(file)
         
         # Return only what the client needs for the session
-        return jsonify({
+        response_data = {
             "image_session_id": upload_data["image_session_id"],
             "filename": upload_data["filename"],
             "original_extension": upload_data["original_extension"],
             "initial_dimensions": upload_data["initial_dimensions"],
             "format": upload_data["format"],
             "size_bytes": upload_data["size_bytes"]
-        }), 200
+        }
+        # Add history status (should be false/false initially, but good to be consistent)
+        history_status = image_service.get_history_status(upload_data["image_session_id"])
+        response_data.update(history_status)
+        
+        return jsonify(response_data), 200
     except ValueError as e: # Catch custom validation errors from service
         current_app.logger.warning(f"Upload validation error: {str(e)}")
         return jsonify({"error": str(e)}), 400
@@ -54,6 +59,8 @@ def resize_image_route(image_session_id, original_extension):
             percentage=data.get('percentage'),
             maintain_aspect_ratio=data.get('maintain_aspect_ratio', True)
         )
+        history_status = image_service.get_history_status(image_session_id)
+        new_metadata.update(history_status)
         return jsonify(new_metadata), 200
     except FileNotFoundError: # Should be caught by the check above, but good practice
         return jsonify({"error": "Image file not found for processing."}), 404
@@ -80,6 +87,8 @@ def rotate_image_route(image_session_id, original_extension):
 
     try:
         new_metadata = image_service.process_rotate(filepath, data['angle'])
+        history_status = image_service.get_history_status(image_session_id)
+        new_metadata.update(history_status)
         return jsonify(new_metadata), 200
     except FileNotFoundError:
         return jsonify({"error": "Image file not found for processing."}), 404
@@ -106,6 +115,8 @@ def flip_image_route(image_session_id, original_extension):
 
     try:
         new_metadata = image_service.process_flip(filepath, data['axis'])
+        history_status = image_service.get_history_status(image_session_id)
+        new_metadata.update(history_status)
         return jsonify(new_metadata), 200
     except ValueError as e:
         return jsonify({"error": str(e)}), 400
@@ -126,6 +137,8 @@ def crop_image_route(image_session_id, original_extension):
 
     try:
         new_metadata = image_service.process_crop(filepath, data['preset'])
+        history_status = image_service.get_history_status(image_session_id)
+        new_metadata.update(history_status)
         return jsonify(new_metadata), 200
     except ValueError as e:
         return jsonify({"error": str(e)}), 400
@@ -157,6 +170,8 @@ def crop_custom_image_route(image_session_id, original_extension):
             width=data['width'], 
             height=data['height']
         )
+        history_status = image_service.get_history_status(image_session_id)
+        new_metadata.update(history_status)
         return jsonify(new_metadata), 200
     except ValueError as e:
         current_app.logger.warning(f"Custom crop validation error for {image_session_id}: {str(e)}")
@@ -179,6 +194,8 @@ def grayscale_image_route(image_session_id, original_extension):
 
     try:
         new_metadata = image_service.process_grayscale(filepath, intensity)
+        history_status = image_service.get_history_status(image_session_id)
+        new_metadata.update(history_status)
         return jsonify(new_metadata), 200
     except ValueError as e:
         return jsonify({"error": str(e)}), 400
@@ -199,6 +216,8 @@ def brightness_image_route(image_session_id, original_extension):
 
     try:
         new_metadata = image_service.process_brightness(filepath, data['level'])
+        history_status = image_service.get_history_status(image_session_id)
+        new_metadata.update(history_status)
         return jsonify(new_metadata), 200
     except ValueError as e:
         return jsonify({"error": str(e)}), 400
@@ -219,6 +238,8 @@ def contrast_image_route(image_session_id, original_extension):
 
     try:
         new_metadata = image_service.process_contrast(filepath, data['level'])
+        history_status = image_service.get_history_status(image_session_id)
+        new_metadata.update(history_status)
         return jsonify(new_metadata), 200
     except ValueError as e:
         return jsonify({"error": str(e)}), 400
@@ -241,6 +262,8 @@ def filter_image_route(image_session_id, original_extension):
 
     try:
         new_metadata = image_service.process_filter(filepath, data['type'], intensity)
+        history_status = image_service.get_history_status(image_session_id)
+        new_metadata.update(history_status)
         return jsonify(new_metadata), 200
     except ValueError as e:
         return jsonify({"error": str(e)}), 400
@@ -310,6 +333,42 @@ def download_image_route(image_session_id, original_extension):
         download_name=download_name,
         mimetype=mime_type
     )
+
+@image_bp.route('/process/<image_session_id>/<original_extension>/undo', methods=['POST'])
+def undo_image_route(image_session_id, original_extension):
+    filepath = image_service.get_temp_filepath(image_session_id, original_extension)
+    if not os.path.exists(filepath):
+        return jsonify({"error": "Image session not found or file does not exist."}), 404
+
+    try:
+        new_metadata, error = image_service.undo_image(image_session_id, original_extension)
+        if error:
+            return jsonify({"error": error}), 400
+        
+        history_status = image_service.get_history_status(image_session_id)
+        new_metadata.update(history_status)
+        return jsonify(new_metadata), 200
+    except Exception as e:
+        current_app.logger.error(f"Undo error: {e}", exc_info=True)
+        return jsonify({"error": "Server error during undo."}), 500
+
+@image_bp.route('/process/<image_session_id>/<original_extension>/redo', methods=['POST'])
+def redo_image_route(image_session_id, original_extension):
+    filepath = image_service.get_temp_filepath(image_session_id, original_extension)
+    if not os.path.exists(filepath):
+        return jsonify({"error": "Image session not found or file does not exist."}), 404
+
+    try:
+        new_metadata, error = image_service.redo_image(image_session_id, original_extension)
+        if error:
+            return jsonify({"error": error}), 400
+        
+        history_status = image_service.get_history_status(image_session_id)
+        new_metadata.update(history_status)
+        return jsonify(new_metadata), 200
+    except Exception as e:
+        current_app.logger.error(f"Redo error: {e}", exc_info=True)
+        return jsonify({"error": "Server error during redo."}), 500
 
 @image_bp.app_errorhandler(413) # Register for the blueprint or app
 def request_entity_too_large_handler(error):

@@ -1,8 +1,125 @@
 import os
 import uuid
+import shutil
+import time
 from PIL import Image, UnidentifiedImageError, ImageOps, ImageEnhance, ImageFilter
 from werkzeug.utils import secure_filename
 import config # Imports from backend/config.py
+
+# --- History Management ---
+# { session_id: { "history": [file_v0, file_v1], "current_index": 0 } }
+session_history = {}
+MAX_HISTORY_STEPS = 3
+
+def _init_history(session_id, filepath):
+    """Initializes history with the uploaded file."""
+    directory, filename = os.path.split(filepath)
+    name, ext = os.path.splitext(filename)
+    version_filename = f"{name}_v0{ext}"
+    version_filepath = os.path.join(directory, version_filename)
+    
+    shutil.copy2(filepath, version_filepath)
+    
+    session_history[session_id] = {
+        "history": [version_filepath],
+        "current_index": 0
+    }
+
+def _add_to_history(session_id, filepath):
+    """
+    Called AFTER a modification.
+    Saves the current state of filepath as a new version.
+    """
+    if session_id not in session_history:
+        _init_history(session_id, filepath)
+        # If we just initialized, we have v0. But we just did a modification, 
+        # so the current file is actually v1 relative to the start.
+        # However, _init_history copies the *current* file as v0.
+        # If we call this AFTER modification, v0 will be the modified file.
+        # This is wrong. We need the history to contain the sequence of states.
+        # If we didn't have history before, we can't undo to the previous state anyway.
+        # So treating the current (modified) state as the first history point is acceptable fallback.
+        return
+
+    session_data = session_history[session_id]
+    history = session_data["history"]
+    current_index = session_data["current_index"]
+
+    # Truncate redo history
+    if current_index < len(history) - 1:
+        for i in range(current_index + 1, len(history)):
+            try:
+                if os.path.exists(history[i]):
+                    os.remove(history[i])
+            except OSError:
+                pass
+        history = history[:current_index + 1]
+
+    # Create new version
+    directory, filename = os.path.split(filepath)
+    name, ext = os.path.splitext(filename)
+    timestamp = int(time.time() * 1000)
+    version_filename = f"{name}_v{timestamp}{ext}"
+    version_filepath = os.path.join(directory, version_filename)
+    
+    shutil.copy2(filepath, version_filepath)
+    history.append(version_filepath)
+    current_index += 1
+    
+    # Limit history size
+    if len(history) > MAX_HISTORY_STEPS + 1:
+        oldest_file = history.pop(0)
+        try:
+            if os.path.exists(oldest_file):
+                os.remove(oldest_file)
+        except OSError:
+            pass
+        current_index -= 1
+    
+    session_data["history"] = history
+    session_data["current_index"] = current_index
+
+def undo_image(session_id, original_extension):
+    if session_id not in session_history:
+        return None, "No history found for this session."
+    
+    session_data = session_history[session_id]
+    if session_data["current_index"] > 0:
+        session_data["current_index"] -= 1
+        version_filepath = session_data["history"][session_data["current_index"]]
+        
+        current_filepath = get_temp_filepath(session_id, original_extension)
+        shutil.copy2(version_filepath, current_filepath)
+        
+        return get_image_metadata(current_filepath), None
+    else:
+        return None, "Cannot undo further."
+
+def redo_image(session_id, original_extension):
+    if session_id not in session_history:
+        return None, "No history found for this session."
+    
+    session_data = session_history[session_id]
+    if session_data["current_index"] < len(session_data["history"]) - 1:
+        session_data["current_index"] += 1
+        version_filepath = session_data["history"][session_data["current_index"]]
+        
+        current_filepath = get_temp_filepath(session_id, original_extension)
+        shutil.copy2(version_filepath, current_filepath)
+        
+        return get_image_metadata(current_filepath), None
+    else:
+        return None, "Cannot redo further."
+
+def get_history_status(session_id):
+    if session_id not in session_history:
+        return {"can_undo": False, "can_redo": False}
+    
+    data = session_history[session_id]
+    return {
+        "can_undo": data["current_index"] > 0,
+        "can_redo": data["current_index"] < len(data["history"]) - 1
+    }
 
 # --- Helper Functions (can be part of this service or a utils module) ---
 def allowed_file(filename):
@@ -75,6 +192,9 @@ def save_uploaded_file(file_storage):
         if not metadata: # Should ideally not happen if verify/load passed
             if os.path.exists(filepath): os.remove(filepath)
             raise UnidentifiedImageError("Could not process image metadata after save.")
+
+        # Initialize history
+        _init_history(session_id, filepath)
 
         return {
             "image_session_id": session_id,
@@ -159,6 +279,11 @@ def process_resize(filepath, width_px=None, height_px=None, percentage=None, mai
         updated_metadata = get_image_metadata(filepath)
         if not updated_metadata:
              raise ValueError("Could not get metadata after resize.")
+        
+        # Update history
+        session_id = os.path.basename(filepath).split('.')[0]
+        _add_to_history(session_id, filepath)
+        
         return {
             "new_dimensions": {"width": updated_metadata["width"], "height": updated_metadata["height"]},
             "new_size_bytes": updated_metadata["size_bytes"]
@@ -197,6 +322,11 @@ def process_rotate(filepath, angle):
         updated_metadata = get_image_metadata(filepath)
         if not updated_metadata:
              raise ValueError("Could not get metadata after rotate.")
+        
+        # Update history
+        session_id = os.path.basename(filepath).split('.')[0]
+        _add_to_history(session_id, filepath)
+
         return {
             "new_dimensions": {"width": updated_metadata["width"], "height": updated_metadata["height"]},
             "new_size_bytes": updated_metadata["size_bytes"]
@@ -233,6 +363,11 @@ def process_flip(filepath, axis):
         updated_metadata = get_image_metadata(filepath)
         if not updated_metadata:
              raise ValueError("Could not get metadata after flip.")
+        
+        # Update history
+        session_id = os.path.basename(filepath).split('.')[0]
+        _add_to_history(session_id, filepath)
+
         return {
             "new_dimensions": {"width": updated_metadata["width"], "height": updated_metadata["height"]},
             "new_size_bytes": updated_metadata["size_bytes"]
@@ -269,6 +404,11 @@ def process_grayscale(filepath, intensity=100):
         updated_metadata = get_image_metadata(filepath)
         if not updated_metadata:
              raise ValueError("Could not get metadata after grayscale conversion.")
+        
+        # Update history
+        session_id = os.path.basename(filepath).split('.')[0]
+        _add_to_history(session_id, filepath)
+
         return {
             "new_dimensions": {"width": updated_metadata["width"], "height": updated_metadata["height"]},
             "new_size_bytes": updated_metadata["size_bytes"],
@@ -346,6 +486,11 @@ def process_crop(filepath, preset):
         updated_metadata = get_image_metadata(filepath)
         if not updated_metadata:
              raise ValueError("Could not get metadata after crop.")
+        
+        # Update history
+        session_id = os.path.basename(filepath).split('.')[0]
+        _add_to_history(session_id, filepath)
+
         return {
             "new_dimensions": {"width": updated_metadata["width"], "height": updated_metadata["height"]},
             "new_size_bytes": updated_metadata["size_bytes"]
@@ -398,6 +543,11 @@ def process_custom_crop(filepath, x, y, width, height):
         updated_metadata = get_image_metadata(filepath)
         if not updated_metadata:
             raise ValueError("Could not get metadata after custom crop.")
+        
+        # Update history
+        session_id = os.path.basename(filepath).split('.')[0]
+        _add_to_history(session_id, filepath)
+
         return {
             "new_dimensions": {"width": updated_metadata["width"], "height": updated_metadata["height"]},
             "new_size_bytes": updated_metadata["size_bytes"]
@@ -469,6 +619,11 @@ def process_brightness(filepath, level):
         updated_metadata = get_image_metadata(filepath)
         if not updated_metadata:
              raise ValueError("Could not get metadata after brightness adjustment.")
+        
+        # Update history
+        session_id = os.path.basename(filepath).split('.')[0]
+        _add_to_history(session_id, filepath)
+
         return {
             "new_dimensions": {"width": updated_metadata["width"], "height": updated_metadata["height"]},
             "new_size_bytes": updated_metadata["size_bytes"]
@@ -505,6 +660,11 @@ def process_contrast(filepath, level):
         updated_metadata = get_image_metadata(filepath)
         if not updated_metadata:
              raise ValueError("Could not get metadata after contrast adjustment.")
+        
+        # Update history
+        session_id = os.path.basename(filepath).split('.')[0]
+        _add_to_history(session_id, filepath)
+
         return {
             "new_dimensions": {"width": updated_metadata["width"], "height": updated_metadata["height"]},
             "new_size_bytes": updated_metadata["size_bytes"]
@@ -551,6 +711,11 @@ def process_filter(filepath, filter_type, intensity=0):
         updated_metadata = get_image_metadata(filepath)
         if not updated_metadata:
              raise ValueError("Could not get metadata after filter application.")
+        
+        # Update history
+        session_id = os.path.basename(filepath).split('.')[0]
+        _add_to_history(session_id, filepath)
+
         return {
             "new_dimensions": {"width": updated_metadata["width"], "height": updated_metadata["height"]},
             "new_size_bytes": updated_metadata["size_bytes"]

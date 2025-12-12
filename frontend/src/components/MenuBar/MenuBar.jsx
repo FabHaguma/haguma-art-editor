@@ -7,7 +7,15 @@ const MenuBar = ({
   onClearImage,
   onSaveAs,
   theme,
-  onThemeToggle
+  onThemeToggle,
+  canUndo,
+  canRedo,
+  onUndo,
+  onRedo,
+  onToolSelect,
+  onZoomIn,
+  onZoomOut,
+  onFitScreen
 }) => {
   const [openMenu, setOpenMenu] = useState(null);
 
@@ -26,25 +34,25 @@ const MenuBar = ({
     edit: {
       label: 'Edit',
       items: [
-        { label: 'Undo', action: () => {}, disabled: true },
-        { label: 'Redo', action: () => {}, disabled: true },
+        { label: 'Undo', action: () => onUndo?.(), disabled: !canUndo },
+        { label: 'Redo', action: () => onRedo?.(), disabled: !canRedo },
       ]
     },
     image: {
       label: 'Image',
       items: [
-        { label: 'Resize...', action: () => {}, disabled: !imageSession },
-        { label: 'Rotate...', action: () => {}, disabled: !imageSession },
-        { label: 'Flip...', action: () => {}, disabled: !imageSession },
-        { label: 'Crop...', action: () => {}, disabled: !imageSession },
+        { label: 'Resize...', action: () => onToolSelect?.('transform'), disabled: !imageSession },
+        { label: 'Rotate...', action: () => onToolSelect?.('transform'), disabled: !imageSession },
+        { label: 'Flip...', action: () => onToolSelect?.('transform'), disabled: !imageSession },
+        { label: 'Crop...', action: () => onToolSelect?.('transform'), disabled: !imageSession },
       ]
     },
     view: {
       label: 'View',
       items: [
-        { label: 'Zoom In', action: () => {}, disabled: !imageSession },
-        { label: 'Zoom Out', action: () => {}, disabled: !imageSession },
-        { label: 'Fit to Screen', action: () => {}, disabled: !imageSession },
+        { label: 'Zoom In', action: () => onZoomIn?.(), disabled: !imageSession },
+        { label: 'Zoom Out', action: () => onZoomOut?.(), disabled: !imageSession },
+        { label: 'Fit to Screen', action: () => onFitScreen?.(), disabled: !imageSession },
       ]
     },
     window: {

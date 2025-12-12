@@ -2,8 +2,9 @@
   display: flex;
   align-items: center;
   height: 32px;
-  background: var(--bg-secondary);
-  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-glass);
+  backdrop-filter: var(--backdrop-blur);
+  border-bottom: 1px solid var(--border-subtle);
   padding: 0 var(--spacing-sm);
   font-size: 0.875rem;
   position: relative;
@@ -22,8 +23,8 @@
   cursor: pointer;
   font-size: 0.875rem;
   font-family: var(--font-family);
-  transition: background 0.15s ease;
-  border-radius: 2px;
+  transition: background var(--transition-fast);
+  border-radius: var(--radius-sm);
 }
 
 .menuButton:hover,
@@ -36,10 +37,11 @@
   top: 100%;
   left: 0;
   min-width: 180px;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: 4px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background: var(--bg-glass-active);
+  backdrop-filter: var(--backdrop-blur);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
   padding: 4px 0;
   margin-top: 2px;
   z-index: 1000;
@@ -55,7 +57,7 @@
   cursor: pointer;
   font-size: 0.875rem;
   font-family: var(--font-family);
-  transition: background 0.15s ease;
+  transition: background var(--transition-fast);
 }
 
 .dropdownItem:hover:not(.disabled) {
@@ -70,6 +72,6 @@
 
 .separator {
   height: 1px;
-  background: var(--border-color);
+  background: var(--border-subtle);
   margin: 4px 8px;
 }

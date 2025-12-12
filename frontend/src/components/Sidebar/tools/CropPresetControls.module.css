@@ -6,13 +6,21 @@
 
 .button {
     padding: 0.5rem;
-    background-color: var(--bg-primary);
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
+    background-color: var(--bg-tertiary);
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: background-color var(--transition-fast);
     color: var(--text-primary);
     font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.mainButton {
+    margin-top: var(--spacing-md);
+    margin-bottom: 0;
+    background-color: var(--bg-secondary); /* Make it slightly distinct */
+    border-color: var(--border-subtle);
 }
 
 .button:hover {

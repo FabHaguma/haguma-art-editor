@@ -14,7 +14,12 @@ const Topbar = ({
   onZoomIn,
   onZoomOut,
   onFitScreen,
-  zoom
+  zoom,
+  canUndo,
+  canRedo,
+  onUndo,
+  onRedo,
+  onToolSelect
 }) => {
   const handleDownload = () => {
     // Download is handled by the DownloadButton component
@@ -43,6 +48,14 @@ const Topbar = ({
         onClearImage={onClearImage}
         theme={theme}
         onThemeToggle={onThemeToggle}
+        canUndo={canUndo}
+        canRedo={canRedo}
+        onUndo={onUndo}
+        onRedo={onRedo}
+        onToolSelect={onToolSelect}
+        onZoomIn={handleZoomIn}
+        onZoomOut={handleZoomOut}
+        onFitScreen={handleFitScreen}
       />
       
       <div className={styles.topbar}>

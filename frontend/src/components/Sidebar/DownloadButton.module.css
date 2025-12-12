@@ -8,9 +8,9 @@
   background-color: var(--primary-color);
   color: white;
   text-decoration: none;
-  border-radius: 4px;
+  border-radius: var(--radius-full);
   font-weight: 600;
-  transition: background-color 0.2s;
+  transition: background-color var(--transition-fast);
   border: none;
   cursor: pointer;
   font-family: inherit;

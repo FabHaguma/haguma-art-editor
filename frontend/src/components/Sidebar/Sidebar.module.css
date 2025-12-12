@@ -3,15 +3,16 @@
   width: 320px;
   min-width: 240px;
   max-width: 400px;
-  background: var(--bg-secondary);
+  background: var(--bg-glass);
+  backdrop-filter: var(--backdrop-blur);
   color: var(--text-primary);
-  border-right: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-subtle);
   display: flex;
   flex-direction: column;
   padding: 1.5rem 1rem;
   gap: 2rem;
   box-sizing: border-box;
-  height: 100%; /* Ensure it takes full height if parent allows */
+  height: 100%;
 }
 
 .logoArea {
@@ -19,13 +20,14 @@
   justify-content: space-between;
   align-items: center;
   padding-bottom: 1rem;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .logoText {
   font-size: 1.25rem;
   font-weight: bold;
   color: var(--text-primary);
+  letter-spacing: var(--font-tracking-tight);
 }
 
 .closeImageButton {
@@ -33,13 +35,13 @@
   border: none;
   color: var(--text-secondary);
   cursor: pointer;
-  padding: 4px;
-  border-radius: 4px;
+  padding: 8px;
+  border-radius: var(--radius-full);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.2rem;
-  transition: background-color 0.2s, color 0.2s;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
 }
 
 .closeImageButton:hover {
@@ -58,7 +60,7 @@
 .sidebarFooter {
   margin-top: auto;
   padding-top: 1rem;
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid var(--border-subtle);
 }
 
 .comingSoon {

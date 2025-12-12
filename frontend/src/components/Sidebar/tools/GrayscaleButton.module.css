@@ -1,14 +1,15 @@
 .button {
     width: 100%;
     padding: 0.75rem;
-    background-color: var(--bg-primary);
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
+    background-color: var(--bg-tertiary);
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all var(--transition-fast);
     color: var(--text-primary);
     font-size: 0.9rem;
-    margin-top: 0.5rem;
+    margin-top: var(--spacing-sm);
+    font-weight: 500;
 }
 
 .button:hover {

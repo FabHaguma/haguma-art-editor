@@ -2,10 +2,7 @@
 .toolSection {
   margin-bottom: 2rem;
   padding: 1rem;
-  background: var(--bg-tertiary);
-  border-radius: 6px;
-  border: 1px solid var(--border-color);
-  box-shadow: 0 1px 4px 0 rgba(0,0,0,0.04);
+  box-shadow: var(--shadow-sm);
 }
 .toolSectionTitle {
   font-size: 1.1em;

@@ -5,11 +5,12 @@
   min-width: 64px;
   max-width: 64px;
   flex-shrink: 0;
-  background: var(--bg-panel);
-  border-right: 2px solid var(--border-color);
-  transition: transform 0.3s ease;
+  background: var(--bg-glass);
+  backdrop-filter: var(--backdrop-blur);
+  border-right: 1px solid var(--border-subtle);
+  transition: transform var(--transition-normal);
   overflow: hidden;
-  color: #f9fafb;
+  color: var(--text-primary);
 }
 
 .toolPalette.hidden {
@@ -36,9 +37,9 @@
   padding: var(--spacing-sm);
   background: transparent;
   border: none;
-  color: #9ca3af;
+  color: var(--text-secondary);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--transition-fast);
   position: relative;
 }
 
@@ -51,17 +52,18 @@
   width: 3px;
   height: 0;
   background: var(--primary-color);
-  transition: height 0.2s ease;
+  transition: height var(--transition-fast);
+  border-radius: 0 4px 4px 0;
 }
 
 .toolButton:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #f9fafb;
+  background: var(--bg-hover);
+  color: var(--text-primary);
 }
 
 .toolButton.active {
   color: var(--primary-color);
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--bg-hover);
 }
 
 .toolButton.active::before {
