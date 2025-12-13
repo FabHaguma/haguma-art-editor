@@ -52,9 +52,16 @@ const ICON_MAP = {
   brush: {
     emoji: '🖌️',
     svg: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M18 13.28A7.88 7.88 0 0 0 17.11 7 8.72 8.72 0 0 0 10.6 3 9 9 0 0 0 2 12s.35 2 1.6 2.4c.5.16 1 .44 1.4.8.4.4.7.9.8 1.4.5 1.3 2.4 1.6 2.4 1.6a9 9 0 0 0 9.8-4.92z"></path>
-        <path d="M17.11 7A6.9 6.9 0 0 1 22 12v6a2 2 0 0 1-2 2h-2.5"></path>
+      <svg fill="currentColor" height="24px" width="24px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+	 viewBox="0 0 458.178 458.178" xml:space="preserve">
+        <g>
+          <path d="M130.415,277.741C95.083,313.074,45.038,324.723,0,312.697c5.918,22.164,17.568,43.116,34.956,60.504
+            c52.721,52.721,138.198,52.721,190.919,0c26.361-26.36,26.36-69.099,0-95.459C199.514,251.38,156.776,251.38,130.415,277.741z"/>
+          <path d="M212.771,234.276c12.728,4.827,24.403,12.338,34.317,22.252c10.077,10.077,17.456,21.838,22.19,34.378l53.47-53.47
+            l-56.568-56.569C245.886,201.161,226.908,220.139,212.771,234.276z"/>
+          <path d="M446.462,57.153c-15.621-15.621-40.948-15.621-56.568,0c-5.887,5.887-54.496,54.496-102.501,102.501l56.568,56.569
+            l102.501-102.501C462.083,98.101,462.083,72.774,446.462,57.153z"/>
+        </g>
       </svg>
     ),
   },
@@ -62,9 +69,9 @@ const ICON_MAP = {
     emoji: 'T',
     svg: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <polyline points="4 7 4 4 20 4 20 7"></polyline>
-        <line x1="9" y1="20" x2="15" y2="20"></line>
-        <line x1="12" y1="4" x2="12" y2="20"></line>
+        <polyline points="4 7 4 4 20 4 20 7" />
+        <line x1="9" y1="20" x2="15" y2="20" />
+        <line x1="12" y1="4" x2="12" y2="20" />
       </svg>
     ),
   },
