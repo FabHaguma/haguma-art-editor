@@ -154,10 +154,17 @@ export const redoImage = async (sessionId, originalExtension) => {
     return response.json();
 };
 
-export const getDownloadUrl = (sessionId, originalExtension, format = null) => {
+export const getDownloadUrl = (sessionId, originalExtension, format = null, filename = null) => {
     let url = `${API_BASE_URL}/download/${sessionId}/${originalExtension}`;
+    const params = new URLSearchParams();
     if (format) {
-        url += `?format=${format}`;
+        params.append('format', format);
+    }
+    if (filename) {
+        params.append('filename', filename);
+    }
+    if (params.toString()) {
+        url += `?${params.toString()}`;
     }
     return url;
 };

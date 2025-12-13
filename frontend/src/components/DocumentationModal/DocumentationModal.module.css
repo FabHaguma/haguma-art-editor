@@ -1,0 +1,118 @@
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modalContent {
+    background-color: var(--bg-glass-active);
+    backdrop-filter: var(--backdrop-blur);
+    padding: 2rem;
+    border-radius: var(--radius-xl);
+    width: 600px;
+    max-width: 90%;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 1rem;
+    position: sticky;
+    top: -2rem; /* Compensate for padding */
+    background-color: inherit; /* Match modal bg */
+    z-index: 1;
+}
+
+.title {
+    margin: 0;
+    font-size: 1.5rem;
+    letter-spacing: var(--font-tracking-tight);
+}
+
+.closeButton {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-md);
+    transition: all 0.2s ease;
+}
+
+.closeButton:hover {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.content {
+    line-height: 1.6;
+}
+
+.section {
+    margin-bottom: 2rem;
+}
+
+.section h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.75rem;
+    color: var(--accent-primary);
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 0.25rem;
+    display: inline-block;
+}
+
+.toolItem {
+    margin-bottom: 0.5rem;
+    padding-left: 1rem;
+    border-left: 2px solid var(--border-subtle);
+}
+
+.shortcutList {
+    list-style-type: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.5rem;
+}
+
+.shortcutList li {
+    background-color: var(--bg-tertiary);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+    font-size: 0.9rem;
+}
+
+/* Scrollbar styling for the modal content */
+.modalContent::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modalContent::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.modalContent::-webkit-scrollbar-thumb {
+    background-color: var(--border-subtle);
+    border-radius: 4px;
+}
+
+.modalContent::-webkit-scrollbar-thumb:hover {
+    background-color: var(--text-secondary);
+}

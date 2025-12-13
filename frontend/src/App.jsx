@@ -4,6 +4,8 @@ import ToolPalette from './components/ToolPalette/ToolPalette';
 import PropertiesPanel from './components/PropertiesPanel/PropertiesPanel';
 import MainCanvas from './components/MainCanvas/MainCanvas';
 import SaveAsModal from './components/SaveAsModal/SaveAsModal';
+import AboutModal from './components/AboutModal/AboutModal';
+import DocumentationModal from './components/DocumentationModal/DocumentationModal';
 import { getDownloadUrl, undoImage, redoImage } from './services/apiService';
 import styles from './App.module.css';
 
@@ -19,6 +21,8 @@ function App() {
     const [cropMode, setCropMode] = useState(false); // Interactive crop mode
     const [cropAspectRatio, setCropAspectRatio] = useState(null); // Aspect ratio for crop
     const [isSaveAsModalOpen, setIsSaveAsModalOpen] = useState(false);
+    const [isAboutModalOpen, setIsAboutModalOpen] = useState(false);
+    const [isDocModalOpen, setIsDocModalOpen] = useState(false);
     const [canUndo, setCanUndo] = useState(false);
     const [canRedo, setCanRedo] = useState(false);
 
@@ -164,6 +168,12 @@ function App() {
         setIsSaveAsModalOpen(false);
     };
 
+    const handleAboutOpen = () => setIsAboutModalOpen(true);
+    const handleAboutClose = () => setIsAboutModalOpen(false);
+
+    const handleDocOpen = () => setIsDocModalOpen(true);
+    const handleDocClose = () => setIsDocModalOpen(false);
+
     const handleUndo = async () => {
         if (!imageSession || !canUndo) return;
         setIsLoading(true);
@@ -191,13 +201,19 @@ function App() {
     const handleDownload = (filename, format) => {
         if (!imageSession) return;
         
-        const downloadUrl = getDownloadUrl(imageSession.id, imageSession.originalExtension, format);
+        const downloadUrl = getDownloadUrl(imageSession.id, imageSession.originalExtension, format, filename);
         
         // Create a temporary link to trigger download
         const link = document.createElement('a');
         link.href = downloadUrl;
+        
         // Ensure correct extension for the filename
-        const extension = format === 'jpeg' ? 'jpg' : format;
+        let extension = format;
+        if (!extension) {
+            extension = imageSession.originalExtension;
+        }
+        if (extension === 'jpeg') extension = 'jpg';
+        
         link.download = `${filename}.${extension}`;
         document.body.appendChild(link);
         link.click();
@@ -209,6 +225,7 @@ function App() {
             <Topbar
                 imageSession={imageSession}
                 onSaveAs={handleSaveAsOpen}
+                onDownload={handleDownload}
                 theme={theme}
                 onThemeToggle={toggleTheme}
                 onToggleLeftPanel={toggleLeftPanel}
@@ -223,6 +240,8 @@ function App() {
                 onUndo={handleUndo}
                 onRedo={handleRedo}
                 onToolSelect={handleToolSelect}
+                onAbout={handleAboutOpen}
+                onDocumentation={handleDocOpen}
             />
 
             <div className={styles.mainLayout}>
@@ -262,6 +281,16 @@ function App() {
                 onClose={handleSaveAsClose}
                 onDownload={handleDownload}
                 currentFilename={imageSession?.metadata?.filename}
+            />
+
+            <AboutModal 
+                isOpen={isAboutModalOpen}
+                onClose={handleAboutClose}
+            />
+
+            <DocumentationModal 
+                isOpen={isDocModalOpen}
+                onClose={handleDocClose}
             />
 
             {isLoading && <div className={styles.globalLoadingIndicator}>Processing...</div>}

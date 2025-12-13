@@ -15,7 +15,9 @@ const MenuBar = ({
   onToolSelect,
   onZoomIn,
   onZoomOut,
-  onFitScreen
+  onFitScreen,
+  onAbout,
+  onDocumentation
 }) => {
   const [openMenu, setOpenMenu] = useState(null);
 
@@ -67,8 +69,8 @@ const MenuBar = ({
     help: {
       label: 'Help',
       items: [
-        { label: 'About', action: () => {} },
-        { label: 'Documentation', action: () => {} },
+        { label: 'About', action: () => onAbout?.() },
+        { label: 'Documentation', action: () => onDocumentation?.() },
       ]
     }
   };

@@ -6,6 +6,7 @@ import styles from './Topbar.module.css';
 const Topbar = ({ 
   imageSession, 
   onSaveAs,
+  onDownload,
   theme,
   onThemeToggle,
   onToggleLeftPanel,
@@ -19,12 +20,19 @@ const Topbar = ({
   canRedo,
   onUndo,
   onRedo,
-  onToolSelect
+  onToolSelect,
+  onAbout,
+  onDocumentation
 }) => {
-  const handleDownload = () => {
-    // Download is handled by the DownloadButton component
-    const downloadBtn = document.querySelector('a[download]');
-    if (downloadBtn) downloadBtn.click();
+  const handleDirectDownload = () => {
+    if (imageSession && onDownload) {
+      const originalName = imageSession.metadata.filename;
+      const lastDotIndex = originalName.lastIndexOf('.');
+      const nameWithoutExt = lastDotIndex !== -1 ? originalName.substring(0, lastDotIndex) : originalName;
+      
+      // Use original format (pass null/undefined as format)
+      onDownload(`${nameWithoutExt}_Edited`, null);
+    }
   };
 
   const handleZoomIn = () => {
@@ -44,7 +52,7 @@ const Topbar = ({
       <MenuBar 
         imageSession={imageSession}
         onSaveAs={onSaveAs}
-        onDownload={handleDownload}
+        onDownload={handleDirectDownload}
         onClearImage={onClearImage}
         theme={theme}
         onThemeToggle={onThemeToggle}
@@ -53,6 +61,8 @@ const Topbar = ({
         onUndo={onUndo}
         onRedo={onRedo}
         onToolSelect={onToolSelect}
+        onAbout={onAbout}
+        onDocumentation={onDocumentation}
         onZoomIn={handleZoomIn}
         onZoomOut={handleZoomOut}
         onFitScreen={handleFitScreen}

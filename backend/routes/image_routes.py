@@ -286,6 +286,7 @@ def download_image_route(image_session_id, original_extension):
         current_app.logger.warning(f"Could not update timestamp for {filepath_on_server}: {e}")
 
     target_format = request.args.get('format')
+    user_filename = request.args.get('filename')
     
     if target_format:
         try:
@@ -294,7 +295,16 @@ def download_image_route(image_session_id, original_extension):
             
             # Serve the converted file
             directory, filename = os.path.split(converted_filepath)
-            download_name = f"edited_haguma_art.{target_format.lower()}"
+            
+            if user_filename:
+                # Ensure extension matches target_format
+                if not user_filename.lower().endswith(f".{target_format.lower()}"):
+                     download_name = f"{user_filename}.{target_format.lower()}"
+                else:
+                     download_name = user_filename
+            else:
+                download_name = f"edited_haguma_art.{target_format.lower()}"
+
             mime_type = f'image/{target_format.lower()}'
             if target_format.lower() == 'jpg': mime_type = 'image/jpeg'
 
@@ -319,7 +329,13 @@ def download_image_route(image_session_id, original_extension):
             return jsonify({"error": "Error converting image for download."}), 500
 
     # Default download (original format)
-    download_name = f"edited_haguma_art.{original_extension.lower()}"
+    if user_filename:
+         if not user_filename.lower().endswith(f".{original_extension.lower()}"):
+             download_name = f"{user_filename}.{original_extension.lower()}"
+         else:
+             download_name = user_filename
+    else:
+        download_name = f"edited_haguma_art.{original_extension.lower()}"
     
     # Determine MIME type (Pillow can also help here if format changed)
     mime_type = f'image/{original_extension.lower()}'
