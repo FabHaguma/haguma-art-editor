@@ -49,6 +49,25 @@ const ICON_MAP = {
       </svg>
     ),
   },
+  brush: {
+    emoji: '🖌️',
+    svg: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M18 13.28A7.88 7.88 0 0 0 17.11 7 8.72 8.72 0 0 0 10.6 3 9 9 0 0 0 2 12s.35 2 1.6 2.4c.5.16 1 .44 1.4.8.4.4.7.9.8 1.4.5 1.3 2.4 1.6 2.4 1.6a9 9 0 0 0 9.8-4.92z"></path>
+        <path d="M17.11 7A6.9 6.9 0 0 1 22 12v6a2 2 0 0 1-2 2h-2.5"></path>
+      </svg>
+    ),
+  },
+  text: {
+    emoji: 'T',
+    svg: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <polyline points="4 7 4 4 20 4 20 7"></polyline>
+        <line x1="9" y1="20" x2="15" y2="20"></line>
+        <line x1="12" y1="4" x2="12" y2="20"></line>
+      </svg>
+    ),
+  },
   'rotate-cw': {
     emoji: '↻',
     svg: (

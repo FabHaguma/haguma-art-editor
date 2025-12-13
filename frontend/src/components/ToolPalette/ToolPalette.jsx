@@ -7,6 +7,8 @@ const TOOLS = [
   { id: 'crop', name: 'Crop', icon: 'crop' },
   { id: 'adjust', name: 'Adjust', icon: 'adjust' },
   { id: 'filter', name: 'Filter', icon: 'filter' },
+  { id: 'brush', name: 'Brush', icon: 'brush' },
+  { id: 'text', name: 'Text', icon: 'text' },
 ];
 
 const ToolPalette = ({ activeTool, onToolSelect, isVisible }) => {

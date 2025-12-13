@@ -2,6 +2,7 @@ import os
 import uuid
 import shutil
 import time
+import io
 from PIL import Image, UnidentifiedImageError, ImageOps, ImageEnhance, ImageFilter
 from werkzeug.utils import secure_filename
 import config # Imports from backend/config.py
@@ -727,3 +728,62 @@ def process_filter(filepath, filter_type, intensity=0):
     except Exception as e:
         raise RuntimeError(f"An unexpected error occurred during filter application: {e}")
 
+
+def update_image_from_client(session_id, original_extension, file_storage):
+    """
+    Updates the current image with a file provided by the client (e.g. after client-side drawing).
+    """
+    filepath = get_temp_filepath(session_id, original_extension)
+    if not os.path.exists(filepath):
+        raise FileNotFoundError(f"Session file not found: {filepath}")
+    
+    # Validate the uploaded file is a valid image
+    try:
+        # Read the file into memory first to validate it
+        file_bytes = file_storage.read()
+        if not file_bytes or len(file_bytes) == 0:
+            raise ValueError("Uploaded file is empty")
+        
+        # Validate it's a valid image
+        img = Image.open(io.BytesIO(file_bytes))
+        img.verify()
+        
+        # Save to a unique temporary file to avoid race conditions
+        unique_suffix = str(uuid.uuid4())
+        temp_filepath = f"{filepath}.{unique_suffix}.tmp"
+        
+        with open(temp_filepath, 'wb') as f:
+            f.write(file_bytes)
+        
+    except UnidentifiedImageError:
+        raise ValueError("Uploaded file is not a valid image")
+    except Exception as e:
+        raise ValueError(f"Failed to process uploaded file: {str(e)}")
+    
+    # Try to replace the original file with retries to handle Windows file locking
+    max_retries = 5
+    for i in range(max_retries):
+        try:
+            os.replace(temp_filepath, filepath)
+            break
+        except PermissionError:
+            if i == max_retries - 1:
+                if os.path.exists(temp_filepath):
+                    try:
+                        os.remove(temp_filepath)
+                    except:
+                        pass
+                raise RuntimeError(f"Could not update image file {filepath} due to file lock. Please try again.")
+            time.sleep(0.2)
+        except Exception as e:
+            if os.path.exists(temp_filepath):
+                try:
+                    os.remove(temp_filepath)
+                except:
+                    pass
+            raise e
+    
+    # Add to history
+    _add_to_history(session_id, filepath)
+    
+    return get_image_metadata(filepath)

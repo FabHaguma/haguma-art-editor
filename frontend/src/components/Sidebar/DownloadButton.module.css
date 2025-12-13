@@ -1,4 +1,4 @@
-.downloadButton {
+/* .downloadButton {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -18,4 +18,4 @@
 
 .downloadButton:hover {
   background-color: var(--primary-hover);
-}
+} */

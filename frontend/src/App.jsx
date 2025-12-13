@@ -6,7 +6,7 @@ import MainCanvas from './components/MainCanvas/MainCanvas';
 import SaveAsModal from './components/SaveAsModal/SaveAsModal';
 import AboutModal from './components/AboutModal/AboutModal';
 import DocumentationModal from './components/DocumentationModal/DocumentationModal';
-import { getDownloadUrl, undoImage, redoImage } from './services/apiService';
+import { getDownloadUrl, undoImage, redoImage, updateImage } from './services/apiService';
 import styles from './App.module.css';
 
 function App() {
@@ -25,6 +25,12 @@ function App() {
     const [isDocModalOpen, setIsDocModalOpen] = useState(false);
     const [canUndo, setCanUndo] = useState(false);
     const [canRedo, setCanRedo] = useState(false);
+
+    // Brush and Text Tool State
+    const [brushSettings, setBrushSettings] = useState({ color: '#000000', size: 10, opacity: 100 });
+    const [textSettings, setTextSettings] = useState({ text: '', color: '#000000', size: 24, font: 'Arial' });
+    const [applyTrigger, setApplyTrigger] = useState(0);
+    const [cancelTrigger, setCancelTrigger] = useState(0);
 
     const toggleTheme = () => {
         setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
@@ -75,6 +81,26 @@ function App() {
     const handleCropCancel = () => {
         setCropMode(false);
         setCropAspectRatio(null);
+    };
+
+    const handleApplyDrawing = () => {
+        setApplyTrigger(prev => prev + 1);
+    };
+
+    const handleCancelDrawing = () => {
+        setCancelTrigger(prev => prev + 1);
+    };
+
+    const handleDrawingComplete = async (blob) => {
+        if (!imageSession) return;
+        setIsLoading(true);
+        try {
+            const result = await updateImage(imageSession.id, imageSession.originalExtension, blob);
+            updatePreviewAndMetadata(result, imageSession.id, imageSession.originalExtension);
+        } catch (err) {
+            setError(err.message);
+            setIsLoading(false);
+        }
     };
 
     // Responsive behavior: collapse panels on mobile by default
@@ -245,12 +271,12 @@ function App() {
             />
 
             <div className={styles.mainLayout}>
-                <ToolPalette
-                    activeTool={activeTool}
-                    onToolSelect={handleToolSelect}
-                    isVisible={showLeftPanel && imageSession}
+                <ToolPalette 
+                    activeTool={activeTool} 
+                    onToolSelect={handleToolSelect} 
+                    isVisible={showLeftPanel} 
                 />
-                
+
                 <MainCanvas
                     imageSession={imageSession}
                     onImageUploaded={handleImageUploaded}
@@ -263,6 +289,12 @@ function App() {
                     onCropComplete={handleCropComplete}
                     onCropCancel={handleCropCancel}
                     updatePreviewAndMetadata={updatePreviewAndMetadata}
+                    activeTool={activeTool}
+                    brushSettings={brushSettings}
+                    textSettings={textSettings}
+                    applyTrigger={applyTrigger}
+                    cancelTrigger={cancelTrigger}
+                    onApplyDrawingComplete={handleDrawingComplete}
                 />
 
                 <PropertiesPanel
@@ -273,6 +305,12 @@ function App() {
                     updatePreviewAndMetadata={updatePreviewAndMetadata}
                     isVisible={showRightPanel && imageSession}
                     onActivateCropMode={handleActivateCropMode}
+                    brushSettings={brushSettings}
+                    setBrushSettings={setBrushSettings}
+                    textSettings={textSettings}
+                    setTextSettings={setTextSettings}
+                    onApplyDrawing={handleApplyDrawing}
+                    onCancelDrawing={handleCancelDrawing}
                 />
             </div>
 

@@ -1,0 +1,10 @@
+.drawingCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: crosshair;
+    z-index: 10; /* Above image, below crop overlay if any */
+    touch-action: none;
+}

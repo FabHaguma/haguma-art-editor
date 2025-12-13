@@ -9,6 +9,8 @@ import BrightnessControl from '../Sidebar/tools/BrightnessControl';
 import ContrastControl from '../Sidebar/tools/ContrastControl';
 import GrayscaleControl from '../Sidebar/tools/GrayscaleControl';
 import FilterControls from '../Sidebar/tools/FilterControls';
+import BrushControls from '../Sidebar/tools/BrushControls';
+import TextControls from '../Sidebar/tools/TextControls';
 import styles from './PropertiesPanel.module.css';
 
 const PropertiesPanel = ({ 
@@ -18,7 +20,13 @@ const PropertiesPanel = ({
   setError,
   updatePreviewAndMetadata,
   isVisible,
-  onActivateCropMode
+  onActivateCropMode,
+  brushSettings,
+  setBrushSettings,
+  textSettings,
+  setTextSettings,
+  onApplyDrawing,
+  onCancelDrawing
 }) => {
   if (!imageSession) {
     return (
@@ -78,6 +86,28 @@ const PropertiesPanel = ({
           <ToolSection title="Filters" defaultOpen={true}>
             <GrayscaleControl {...commonToolProps} />
             <FilterControls {...commonToolProps} />
+          </ToolSection>
+        );
+      case 'brush':
+        return (
+          <ToolSection title="Brush Tool" defaultOpen={true}>
+            <BrushControls 
+              settings={brushSettings} 
+              onSettingsChange={setBrushSettings}
+              onApply={onApplyDrawing}
+              onCancel={onCancelDrawing}
+            />
+          </ToolSection>
+        );
+      case 'text':
+        return (
+          <ToolSection title="Text Tool" defaultOpen={true}>
+            <TextControls 
+              settings={textSettings} 
+              onSettingsChange={setTextSettings}
+              onApply={onApplyDrawing}
+              onCancel={onCancelDrawing}
+            />
           </ToolSection>
         );
       default:

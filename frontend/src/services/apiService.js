@@ -154,6 +154,21 @@ export const redoImage = async (sessionId, originalExtension) => {
     return response.json();
 };
 
+export const updateImage = async (sessionId, originalExtension, blob) => {
+    const formData = new FormData();
+    formData.append('file', blob, `updated.${originalExtension}`);
+
+    const response = await fetch(`${API_BASE_URL}/process/${sessionId}/${originalExtension}/update`, {
+        method: 'POST',
+        body: formData,
+    });
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: "Network error" }));
+        throw new Error(errorData.error || `Update failed with status: ${response.status}`);
+    }
+    return response.json();
+};
+
 export const getDownloadUrl = (sessionId, originalExtension, format = null, filename = null) => {
     let url = `${API_BASE_URL}/download/${sessionId}/${originalExtension}`;
     const params = new URLSearchParams();

@@ -389,3 +389,31 @@ def redo_image_route(image_session_id, original_extension):
 @image_bp.app_errorhandler(413) # Register for the blueprint or app
 def request_entity_too_large_handler(error):
     return jsonify(error=f"File is too large. Maximum size is {config.MAX_FILE_SIZE_MB}MB."), 413
+
+@image_bp.route('/process/<image_session_id>/<original_extension>/update', methods=['POST'])
+def update_image_route(image_session_id, original_extension):
+    if 'file' not in request.files:
+        current_app.logger.error("Update route: No file part in request")
+        return jsonify({"error": "No file part"}), 400
+    
+    file = request.files['file']
+    if not file or file.filename == '':
+        current_app.logger.error("Update route: Empty file or filename")
+        return jsonify({"error": "No selected file"}), 400
+    
+    try:
+        current_app.logger.info(f"Update route: Processing file for session {image_session_id}, extension {original_extension}")
+        new_metadata = image_service.update_image_from_client(image_session_id, original_extension, file)
+        
+        # Get history status
+        history_status = image_service.get_history_status(image_session_id)
+        new_metadata.update(history_status)
+        
+        current_app.logger.info(f"Update route: Successfully updated image")
+        return jsonify(new_metadata), 200
+    except FileNotFoundError as e:
+        current_app.logger.error(f"Update error - File not found: {str(e)}")
+        return jsonify({"error": "Session not found"}), 404
+    except Exception as e:
+        current_app.logger.error(f"Update error: {str(e)}", exc_info=True)
+        return jsonify({"error": str(e)}), 500

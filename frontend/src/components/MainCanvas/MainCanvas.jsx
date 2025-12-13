@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ImagePreview from './ImagePreview';
-import ImageUploadArea from '../ImageUploadArea/ImageUploadArea'; // Corrected path
+import ImageUploadArea from '../ImageUploadArea/ImageUploadArea';
 import CropTool from '../Sidebar/tools/CropTool';
+import DrawingLayer from './DrawingLayer';
 import { cropImageCustom } from '../../services/apiService';
-import styles from './MainCanvas.module.css'; // Create MainCanvas.module.css
+import styles from './MainCanvas.module.css';
 
 function MainCanvas({ 
     imageSession, 
@@ -16,14 +17,20 @@ function MainCanvas({
     cropAspectRatio = null,
     onCropComplete,
     onCropCancel,
-    updatePreviewAndMetadata
+    updatePreviewAndMetadata,
+    activeTool,
+    brushSettings,
+    textSettings,
+    applyTrigger,
+    cancelTrigger,
+    onApplyDrawingComplete
 }) {
     const [imageNaturalSize, setImageNaturalSize] = useState({ width: 0, height: 0 });
     const imageRef = useRef(null);
 
     // Get natural image dimensions when preview loads
     useEffect(() => {
-        if (imageSession?.previewUrl && imageRef.current) {
+        if (imageSession?.previewUrl) {
             const img = new Image();
             img.onload = () => {
                 setImageNaturalSize({ width: img.naturalWidth, height: img.naturalHeight });
@@ -69,7 +76,24 @@ function MainCanvas({
                         imageUrl={imageSession.previewUrl}
                         altText={imageSession.metadata?.filename || 'Edited image'}
                         zoom={zoom}
-                    />
+                        naturalWidth={imageNaturalSize.width}
+                        naturalHeight={imageNaturalSize.height}
+                    >
+                        {(activeTool === 'brush' || activeTool === 'text') && (
+                            <DrawingLayer
+                                activeTool={activeTool}
+                                brushSettings={brushSettings}
+                                textSettings={textSettings}
+                                width={imageNaturalSize.width}
+                                height={imageNaturalSize.height}
+                                applyTrigger={applyTrigger}
+                                cancelTrigger={cancelTrigger}
+                                onApplyComplete={onApplyDrawingComplete}
+                                imageUrl={imageSession.previewUrl}
+                            />
+                        )}
+                    </ImagePreview>
+
                     {cropMode && imageNaturalSize.width > 0 && (
                         <CropTool
                             imageSessionId={imageSession.id}

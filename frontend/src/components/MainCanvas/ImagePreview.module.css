@@ -5,14 +5,23 @@
   justify-content: center;
   width: 100%;
   height: 100%;
+  overflow: hidden; /* Prevent scrollbars from scale */
+}
+
+.imageWrapper {
+  position: relative;
+  max-width: 90%;
+  max-height: 90%;
+  transition: transform 0.2s ease;
+  transform-origin: center center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: adds depth */
 }
 
 .previewImage {
-  max-width: 90%;
-  max-height: 90%;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
-  transition: transform 0.2s ease;
-  transform-origin: center center;
+  display: block;
 }
 
 .placeholder {
