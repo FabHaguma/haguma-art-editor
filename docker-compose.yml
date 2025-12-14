@@ -3,43 +3,30 @@ version: "3.8"
 services:
   backend:
     build: ./backend
-    container_name: haguma-backend
+    container_name: arteditor-backend
     restart: unless-stopped
     volumes:
-      - ./backend/temp_images:/app/temp_images # Persist temp_images if needed across restarts, or manage cleanup
-    ports:
-      - "5001:5001" # Expose Flask dev server port, Caddy will connect to this
+      - ./backend/temp_images:/app/temp_images
+    expose:
+      - "5001"
     environment:
-      - FLASK_ENV=development # Or production
-      # Add any other environment variables your Flask app needs
+      - FLASK_ENV=production
 
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile # You'll need to create this Dockerfile
-    container_name: haguma-frontend
+      dockerfile: Dockerfile
+    container_name: arteditor-frontend
     restart: unless-stopped
-    ports:
-      - "5173:5173" # Default Vite dev server port, Caddy will connect to this
-        # For production, Vite builds static files, served by Caddy or Nginx inside container.
-        # If building static assets, the port might be different (e.g., 80 for Nginx serving files)
-
-  caddy:
-    image: caddy:latest
-    container_name: haguma-caddy
-    restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
-      - "443:443/udp" # For HTTP/3
-    volumes:
-      - ./caddy/Caddyfile:/etc/caddy/Caddyfile # Mount your Caddyfile
-      - caddy_data:/data # Persists Caddy's state (certificates, etc.)
-      - caddy_config:/config
+    expose:
+      - "80"
+    networks:
+      - default
+      - caddy_network
     depends_on:
       - backend
-      - frontend
 
-volumes:
-  caddy_data:
-  caddy_config:
+networks:
+  caddy_network:
+    external: true
+

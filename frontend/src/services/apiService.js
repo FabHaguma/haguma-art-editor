@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001/api'; // Adjust if Caddy path changes
+const API_BASE_URL = '/api';
 
 export const uploadImage = async (file) => {
     const formData = new FormData();
