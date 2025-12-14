@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  backend:
+  arteditor-backend:
     build: ./backend
     container_name: arteditor-backend
     restart: unless-stopped
@@ -11,8 +11,10 @@ services:
       - "5001"
     environment:
       - FLASK_ENV=production
+    networks:
+      - arteditor-internal
 
-  frontend:
+  arteditor-frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
@@ -21,12 +23,14 @@ services:
     expose:
       - "80"
     networks:
-      - default
+      - arteditor-internal
       - caddy_network
     depends_on:
-      - backend
+      - arteditor-backend
 
 networks:
   caddy_network:
     external: true
+  arteditor-internal:
+    driver: bridge
 
